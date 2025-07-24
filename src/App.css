@@ -1,0 +1,14 @@
+.App {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100vh;
+  background-color: #121212;
+}
+
+.sidenav {
+  width: 250px;
+  background-color: #5B5A5A;
+  color: #ffffff;
+  padding: 20px;
+}
