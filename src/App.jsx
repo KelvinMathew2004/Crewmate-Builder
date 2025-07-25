@@ -23,11 +23,15 @@ const App = () => {
       element:<CrewmateGallery />
     },
     {
-      path:"/details/:id",
+      path:"/gallery/details/:id",
       element: <CrewmateDetails />
     },
     {
-      path:"/edit/:id",
+      path:"/gallery/details/:id/edit",
+      element: <UpdateCrewmate />
+    },
+    {
+      path:"/gallery/edit/:id",
       element: <UpdateCrewmate />
     },
     {

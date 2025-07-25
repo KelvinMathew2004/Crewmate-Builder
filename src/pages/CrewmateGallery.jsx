@@ -1,42 +1,48 @@
 import { useState, useEffect } from 'react'
-// import { supabase } from '../client'
-// import Card from '../components/Card'
+import { supabase } from '../client'
+import { Link } from 'react-router-dom'
+import Card from '../components/Card'
 
 const CrewmateGallery = (props) => {
 
-    const [posts, setPosts] = useState([])
+    const [crewmates, setCrewmates] = useState([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         // READ all post from table
-        const fetchPosts = async () => {
+        const fetchCrewmates = async () => {
             const {data} = await supabase
-                .from('Posts')
+                .from('Crewmates')
                 .select()
                 .order('created_at', { ascending: true })
 
             // set state of posts
-            setPosts(data)
+            setCrewmates(data)
+            setLoading(false)
         }
-        fetchPosts()
+        fetchCrewmates()
     }, [props])
+
+    if (loading) return <p>Loading...</p>
     
     return (
         <div className="CrewmateGallery">
+            <h1>Your Crewmate Gallery!</h1>
             {
-                posts && posts.length > 0 ?
-                [...posts]
+                crewmates && crewmates.length > 0 ?
+                [...crewmates]
                 .sort((a, b) => a.id - b.id)
-                .map((post,index) => 
+                .map((crewmate,index) => 
                     <Card 
-                        key={post.id}
-                        id={post.id} 
-                        title={post.title}
-                        author={post.author}
-                        description={post.description}
-                        betCount={post.betCount}
+                        key={crewmate.id}
+                        id={crewmate.id} 
+                        name={crewmate.name}
+                        speed={crewmate.speed}
+                        color={crewmate.color}
                     />
-                ) : <h2>{'No Challenges Yet 😞'}</h2>
+                ) : <h2>You haven't made a crewmate yet!</h2>
             }
+            <Link to="/new"><button>Create one here!</button></Link>
         </div>  
     )
 }
