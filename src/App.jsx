@@ -7,8 +7,7 @@ import CrewmateGallery from './pages/CrewmateGallery'
 import NewCrewmate from './pages/NewCrewmate'
 import UpdateCrewmate from './pages/UpdateCrewmate'
 import SideNav from './pages/SideNav'
-import { Link } from 'react-router-dom'
-
+import FloatingCrewmate from './components/FloatingCrewmate'
 
 const App = () => {
 
@@ -25,6 +24,10 @@ const App = () => {
     {
       path:"/gallery/details/:id",
       element: <CrewmateDetails />
+    },
+    {
+      path:"/edit/:id",
+      element: <UpdateCrewmate />
     },
     {
       path:"/gallery/details/:id/edit",
@@ -45,6 +48,7 @@ const App = () => {
     <div className="App">
       <SideNav />
         {element}
+      <FloatingCrewmate />
     </div>
 
   )
