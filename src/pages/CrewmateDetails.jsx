@@ -2,11 +2,12 @@ import React from "react"
 import {useState, useEffect} from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { supabase } from '../client'
+import crewmatesBlaming from '../assets/crewmates-blaming.png'
 
 const CrewmateDetails = ({data}) => {
 
     const {id} = useParams()
-    const [crewmate, setCrewmate] = useState({id: null, name: "", speed: "", color: ""})
+    const [crewmate, setCrewmate] = useState({id: null, name: "", speed: "", color: "", type: ""})
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -24,7 +25,8 @@ const CrewmateDetails = ({data}) => {
                     id: data.id,
                     name: data.name || '',
                     speed: data.speed || '',
-                    color: data.color || ''
+                    color: data.color || '',
+                    type: data.type || ''
                 })
             }
             setLoading(false)
@@ -36,12 +38,25 @@ const CrewmateDetails = ({data}) => {
 
     return (
         <div className="CrewmateDetails">
-            <h1>Crewmate: {crewmate.name}</h1>
-            <h1>Stats:</h1>
-            <h2>Color: {crewmate.color}</h2>
-            <h2>Speed: {crewmate.speed} mph</h2>
-            { crewmate.speed < 3 ? <h2 className="warning">You may want to find a Crewmate with more speed, this one is kind of slow 😬</h2> : null }
-            <Link to={'edit/'+ props.id}><button>Edit Crewmate</button></Link>
+            <h1>Crewmate Details</h1>
+            <img src={crewmatesBlaming} alt="crewmates blaming" className="crewmates-blaming-image" />
+            <div className="details-card">
+                <h1>{crewmate.name}</h1>
+                
+                <div className="stats-container">
+                    <h2>Color: <span className="stat-value">{crewmate.color}</span></h2>
+                    <h2>Speed: <span className="stat-value">{crewmate.speed} mph</span></h2>
+                </div>
+
+                { crewmate.speed < 3 && crewmate.type === "crewmate" ? 
+                    <h2 className="warning">Warning: Low speed detected. This crewmate is kind of slow 😬</h2> 
+                    : null 
+                }
+                
+                <Link to={'/edit/'+ crewmate.id}>
+                    <button>Edit Crewmate</button>
+                </Link>
+            </div>
         </div>
     )
 }   

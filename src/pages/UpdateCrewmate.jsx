@@ -2,12 +2,20 @@ import React from "react";
 import {useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom'
 import { supabase } from '../client'
+import crewmateImg from '../assets/crewmate.png';
+import imposterImg from '../assets/imposter.png';
 
 const UpdateCrewmate = ({data}) => {
 
     const {id} = useParams()
-    const [crewmate, setCrewmate] = useState({id: null, name: "", speed: "", color: ""})
+    const [crewmate, setCrewmate] = useState({ name: "", speed: "", color: "", type: "crewmate" });
     const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        if (crewmate.type === 'imposter') {
+            setCrewmate(prev => ({ ...prev, speed: '3' }));
+        }
+    }, [crewmate.type]);
 
     useEffect(() => {
         const fetchCrewmate = async () => {
@@ -15,22 +23,23 @@ const UpdateCrewmate = ({data}) => {
                 .from('Crewmates')
                 .select('*')
                 .eq('id', id)
-                .single()
+                .single();
 
             if (error) {
-                console.error('Error fetching post:', error)
+                console.error('Error fetching post:', error);
             } else if (data) {
                 setCrewmate({
                     id: data.id,
                     name: data.name || '',
                     speed: data.speed || '',
-                    color: data.color || ''
-                })
+                    color: data.color || '',
+                    type: data.type || 'crewmate'
+                });
             }
-            setLoading(false)
-        }
-        fetchCrewmate()
-    }, [id])
+            setLoading(false);
+        };
+        fetchCrewmate();
+    }, [id]);
 
     const handleChange = (event) => {
         const {name, value} = event.target
@@ -44,14 +53,14 @@ const UpdateCrewmate = ({data}) => {
 
     const updateCrewmate = async (event) => {
         event.preventDefault();
-
+        
         await supabase
             .from('Crewmates')
-            .update({ name: crewmate.name, speed: crewmate.speed,  color: crewmate.color})
+            .update({ name: crewmate.name, speed: crewmate.speed, color: crewmate.color, type: crewmate.type })
             .eq('id', id);
 
         window.location = "/gallery";
-    }
+    };
 
     // UPDATE post
     const deleteCrewmate = async (event) => {
@@ -69,107 +78,79 @@ const UpdateCrewmate = ({data}) => {
 
     return (
         <div className="UpdateCrewmate">
-            <h1>Welcome to the Crewmate Gallery!</h1>
+            <h1>Update Your Crewmate</h1>
+            
+            <div className="type-selector">
+                <label className={`type-option ${crewmate.type === 'crewmate' ? 'crewmate-selected' : ''}`}>
+                    <input type="radio" name="type" value="crewmate" checked={crewmate.type === 'crewmate'} onChange={handleChange} />
+                    <img src={crewmateImg} alt="Select Crewmate" />
+                </label>
+                <label className={`type-option ${crewmate.type === 'imposter' ? 'imposter-selected' : ''}`}>
+                    <input type="radio" name="type" value="imposter" checked={crewmate.type === 'imposter'} onChange={handleChange} />
+                    <img src={imposterImg} alt="Select Imposter" />
+                </label>
+            </div>
+
             <form className='edit-form-container'>
-                <div className='form-group'>
-                    <label htmlFor="name">Name:</label>
-                    <input type="text" id="name" name="name" className="form-input" value={crewmate.name} onChange={handleChange} placeholder="Enter crewmate's name" />
+                <div className='form-card'>
+                    <h3>Crewmate Name</h3>
+                    <div className='form-group'>
+                        <label htmlFor="name">Name:</label>
+                        <input 
+                            type="text" 
+                            id="name" 
+                            name="name" 
+                            className="form-input" 
+                            value={crewmate.name} 
+                            onChange={handleChange} 
+                            placeholder="Enter crewmate's name" 
+                        />
+                    </div>
                 </div>
 
-                <div className='form-group'>
-                    <label htmlFor="speed">Speed (mph):</label>
-                    <input type="text" id="speed" name="speed" className="form-input" value={crewmate.speed} onChange={handleChange} />
+                <div className='form-card'>
+                    <h3>Attributes</h3>
+                    <div className='form-group'>
+                        <label htmlFor="speed">Speed (mph):</label>
+                        <input 
+                            type="text" 
+                            id="speed" 
+                            name="speed" 
+                            className="form-input" 
+                            value={crewmate.speed} 
+                            onChange={handleChange} 
+                            placeholder={crewmate.type === 'imposter' ? 'Locked for Imposters' : "Enter speed in mph"}
+                            disabled={crewmate.type === 'imposter'}
+                        />
+                        {crewmate.type === 'imposter' && (
+                            <p className="help-text">Speed drops to 1 mph when lights are off.</p>
+                        )}
+                    </div>
                 </div>
 
-                <div className='form-group'>
-                    <label htmlFor="color">Color:</label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="color"
-                            value='red'
-                            checked={crewmate.color === 'red'}
-                            onChange={handleChange}
-                        />
-                        Red
-                    </label>
-                    <br />
-                    <label>
-                        <input
-                            type="radio"
-                            name="color"
-                            value='green'
-                            checked={crewmate.color === 'green'}
-                            onChange={handleChange}
-                        />
-                        Green
-                    </label>
-                    <br />
-                    <label>
-                        <input
-                            type="radio"
-                            name="color"
-                            value='blue'
-                            checked={crewmate.color === 'blue'}
-                            onChange={handleChange}
-                        />
-                        Blue
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="color"
-                            value='purple'
-                            checked={crewmate.color === 'purple'}
-                            onChange={handleChange}
-                        />
-                        Purple
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="color"
-                            value='yellow'
-                            checked={crewmate.color === 'yellow'}
-                            onChange={handleChange}
-                        />
-                        Yellow
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="color"
-                            value='orange'
-                            checked={crewmate.color === 'orange'}
-                            onChange={handleChange}
-                        />
-                        Orange
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="color"
-                            value='pink'
-                            checked={crewmate.color === 'pink'}
-                            onChange={handleChange}
-                        />
-                        Pink
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name='rainbow'
-                            value={crewmate.color}
-                            checked={crewmate.color === 'rainbow'}
-                            onChange={handleChange}
-                        />
-                        Rainbow
-                    </label>
+                <div className='form-card'>
+                    <h3>Choose a Color</h3>
+                    <div className='color-options-container'>
+                        {['red', 'green', 'blue', 'purple', 'yellow', 'orange', 'pink', 'rainbow'].map(color => (
+                            <label className="color-option" key={color}>
+                                <input
+                                    type="radio"
+                                    name="color"
+                                    value={color}
+                                    checked={crewmate.color === color}
+                                    onChange={handleChange}
+                                />
+                                <span className={`color-swatch swatch-${color}`}></span>
+                            </label>
+                        ))}
+                    </div>
                 </div>
-
-                <button type="submit" onClick={updateCrewmate}>Submit</button>
-                <button onClick={deleteCrewmate}>Delete</button>
             </form>
+            
+            <div className="action-buttons">
+                <button type="submit" onClick={updateCrewmate}>Update Crewmate</button>
+                <button className="delete-button" onClick={deleteCrewmate}>Delete Crewmate</button>
+            </div>
         </div>
     );
 }

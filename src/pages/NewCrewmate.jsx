@@ -1,138 +1,109 @@
-import React from "react";
-import { useState } from 'react'
-import { supabase } from '../client'
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../client';
+import crewmateImg from '../assets/crewmate.png';
+import imposterImg from '../assets/imposter.png';
+import '../App.css';
 
 const NewCrewmate = () => {
+    const [crewmate, setCrewmate] = useState({ name: "", speed: "", color: "", type: "crewmate" });
 
-    const [crewmate, setCrewmate] = useState({name: "", speed: "", color: ""})
+    useEffect(() => {
+        if (crewmate.type === 'imposter') {
+            setCrewmate(prev => ({ ...prev, speed: '3' }));
+        }
+    }, [crewmate.type]);
 
     const handleChange = (event) => {
-        const {name, value} = event.target
-        setCrewmate( (prev) => {
-            return {
-                ...prev,
-                [name]:value,
-            }
-        })
-    }
+        const { name, value } = event.target;
+        setCrewmate((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
 
     const createCrewmate = async (event) => {
         event.preventDefault();
-
         await supabase
             .from('Crewmates')
-            .insert({name: crewmate.name, speed: crewmate.speed, color: crewmate.color})
+            .insert({ name: crewmate.name, speed: crewmate.speed, color: crewmate.color, type: crewmate.type })
             .select();
-
         window.location = "/gallery";
-    }
-
-    console.log("Current crewmate state:", crewmate);
+    };
 
     return (
         <div className="NewCrewmate">
-            <h1>Create a New Crewmate</h1>
+            <h1>Create a Character</h1>
+
+            <div className="type-selector">
+                <label className={`type-option ${crewmate.type === 'crewmate' ? 'crewmate-selected' : ''}`}>
+                    <input type="radio" name="type" value="crewmate" checked={crewmate.type === 'crewmate'} onChange={handleChange} />
+                    <img src={crewmateImg} alt="Select Crewmate" />
+                </label>
+                <label className={`type-option ${crewmate.type === 'imposter' ? 'imposter-selected' : ''}`}>
+                    <input type="radio" name="type" value="imposter" checked={crewmate.type === 'imposter'} onChange={handleChange} />
+                    <img src={imposterImg} alt="Select Imposter" />
+                </label>
+            </div>
+
             <form className='edit-form-container'>
-                <div className='form-group'>
-                    <label htmlFor="name">Name:</label>
-                    <input type="text" id="name" name="name" className="form-input" value={crewmate.name} onChange={handleChange} placeholder="Enter crewmate's name" />
+                <div className='form-card'>
+                    <h3>Character Name</h3>
+                    <div className='form-group'>
+                        <label htmlFor="name">Name:</label>
+                        <input 
+                            type="text" 
+                            id="name" 
+                            name="name" 
+                            className="form-input" 
+                            value={crewmate.name} 
+                            onChange={handleChange} 
+                            placeholder="Enter character's name" 
+                        />
+                    </div>
                 </div>
 
-                <div className='form-group'>
-                    <label htmlFor="speed">Speed (mph):</label>
-                    <input type="text" id="speed" name="speed" className="form-input" value={crewmate.speed} onChange={handleChange} />
+                <div className='form-card'>
+                    <h3>Attributes</h3>
+                    <div className='form-group'>
+                        <label htmlFor="speed">Speed (mph):</label>
+                        <input 
+                            type="text" 
+                            id="speed" 
+                            name="speed" 
+                            className="form-input" 
+                            value={crewmate.speed} 
+                            onChange={handleChange} 
+                            placeholder={crewmate.type === 'imposter' ? 'Locked for Imposters' : "Enter speed in mph"}
+                            disabled={crewmate.type === 'imposter'}
+                        />
+                        {crewmate.type === 'imposter' && (
+                            <p className="help-text">Speed drops to 1 mph when lights are off.</p>
+                        )}
+                    </div>
                 </div>
 
-                <div className='form-group'>
-                    <label htmlFor="color">Color:</label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="color"
-                            value='red'
-                            checked={crewmate.color === 'red'}
-                            onChange={handleChange}
-                        />
-                        Red
-                    </label>
-                    <br />
-                    <label>
-                        <input
-                            type="radio"
-                            name="color"
-                            value='green'
-                            checked={crewmate.color === 'green'}
-                            onChange={handleChange}
-                        />
-                        Green
-                    </label>
-                    <br />
-                    <label>
-                        <input
-                            type="radio"
-                            name="color"
-                            value='blue'
-                            checked={crewmate.color === 'blue'}
-                            onChange={handleChange}
-                        />
-                        Blue
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="color"
-                            value='purple'
-                            checked={crewmate.color === 'purple'}
-                            onChange={handleChange}
-                        />
-                        Purple
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="color"
-                            value='yellow'
-                            checked={crewmate.color === 'yellow'}
-                            onChange={handleChange}
-                        />
-                        Yellow
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="color"
-                            value='orange'
-                            checked={crewmate.color === 'orange'}
-                            onChange={handleChange}
-                        />
-                        Orange
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="color"
-                            value='pink'
-                            checked={crewmate.color === 'pink'}
-                            onChange={handleChange}
-                        />
-                        Pink
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name='rainbow'
-                            value={crewmate.color}
-                            checked={crewmate.color === 'rainbow'}
-                            onChange={handleChange}
-                        />
-                        Rainbow
-                    </label>
+                <div className='form-card'>
+                    <h3>Choose a Color</h3>
+                    <div className='color-options-container'>
+                        {['red', 'green', 'blue', 'purple', 'yellow', 'orange', 'pink', 'rainbow'].map(color => (
+                            <label className="color-option" key={color}>
+                                <input
+                                    type="radio"
+                                    name="color"
+                                    value={color}
+                                    checked={crewmate.color === color}
+                                    onChange={handleChange}
+                                />
+                                <span className={`color-swatch swatch-${color}`}></span>
+                            </label>
+                        ))}
+                    </div>
                 </div>
-
-                <button type="submit" onClick={createCrewmate}>Create Crewmate</button>
             </form>
+
+            <button type="submit" onClick={createCrewmate}>Create Character</button>
         </div>
     );
-}
+};
 
 export default NewCrewmate;
