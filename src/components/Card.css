@@ -1,0 +1,103 @@
+/* GENERAL CARD STYLING */
+.Card {
+  background: linear-gradient(145deg, #3a3a3a, #2c2c2c);
+  border-radius: 15px;
+  padding: 1.5rem;
+  color: #fff;
+  text-align: center;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  position: relative;
+  width: 300px; 
+  border: #7b7b7b 1px solid;
+}
+
+.Card:hover {
+  transform: translateY(-5px);
+}
+
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  height: 100%; 
+  justify-content: space-between; 
+}
+
+.crewmate-outline {
+  width: 30%;
+  max-width: 200px;
+  margin-bottom: 30px;
+  margin-top: 10px;
+  filter: brightness(0) invert(1);
+  transition: filter 0.3s ease;
+}
+
+.crewmate-outline.crewmate {
+  filter: brightness(0) invert(1) sepia(1) hue-rotate(140deg) saturate(500%) brightness(0.9);
+}
+
+.crewmate-outline.imposter {
+  filter: brightness(0) saturate(100%) invert(15%) sepia(90%) saturate(3465%) hue-rotate(356deg) brightness(95%) contrast(110%);
+}
+
+.stat {
+  background-color: #cccccc;
+  color: #000000;
+  font-weight: bold;
+  padding: 8px 20px;
+  border-radius: 8px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+  margin-left: 10px;
+}
+
+.name, .speed, .color {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+}
+
+.Card {
+  filter: drop-shadow(8px -8px 6px #222);
+}
+.Card:hover {
+  filter: drop-shadow(12px -12px 8px #222);
+}
+
+.color-red { filter: drop-shadow(16px -16px 12px #C51111); }
+.color-red:hover { filter: drop-shadow(24px -24px 16px #C51111); }
+
+.color-green { filter: drop-shadow(16px -16px 12px #127A12); }
+.color-green:hover { filter: drop-shadow(24px -24px 16px #127A12); }
+
+.color-blue { filter: drop-shadow(16px -16px 12px #132ED1); }
+.color-blue:hover { filter: drop-shadow(24px -24px 16px #132ED1); }
+
+.color-purple { filter: drop-shadow(16px -16px 12px #6B2FBC); }
+.color-purple:hover { filter: drop-shadow(24px -24px 16px #6B2FBC); }
+
+.color-yellow { filter: drop-shadow(16px -16px 12px #F6F657); }
+.color-yellow:hover { filter: drop-shadow(24px -24px 16px #F6F657); }
+
+.color-orange { filter: drop-shadow(16px -16px 12px #ED7D0E); }
+.color-orange:hover { filter: drop-shadow(24px -24px 16px #ED7D0E); }
+
+.color-pink { filter: drop-shadow(16px -16px 12px #EC75A8); }
+.color-pink:hover { filter: drop-shadow(24px -24px 16px #EC75A8); }
+
+.color-rainbow {
+  filter: 
+    drop-shadow(3px -3px 1.5px red)
+    drop-shadow(4px -4px 1.5px orange)
+    drop-shadow(5px -5px 1.5px yellow)
+    drop-shadow(6px -6px 1.5px limegreen);
+}
+.color-rainbow:hover {
+  filter: 
+    drop-shadow(4px -4px 2px red)
+    drop-shadow(5px -5px 2px orange)
+    drop-shadow(6px -6px 2px yellow)
+    drop-shadow(7px -7px 2px limegreen)
+    drop-shadow(8px -8px 2px cyan);
+}
