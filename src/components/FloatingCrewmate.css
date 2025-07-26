@@ -1,0 +1,27 @@
+.floating-crewmate-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.floating-crewmate {
+  position: absolute;
+  left: -150px;
+  width: 80px;
+  height: auto;
+  animation: floatAcross 15s linear forwards;
+}
+
+@keyframes floatAcross {
+  0% {
+    transform: translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateX(calc(100vw + 200px)) rotate(360deg);
+  }
+}
