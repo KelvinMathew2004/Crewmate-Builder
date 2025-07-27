@@ -2,7 +2,7 @@
 
 Submitted by: **Kelvin Mathew**
 
-This web app: **insert description**
+This web app: **This is a fun, space-themed character creator where you can build your own team of "Crewmates" and "Imposters." You can design new characters, see them all in a gallery, edit their details, or delete them. The app has a cool 3D look with glowing cards and animated characters that float across the screen, making for a fun, immersive experience.**
 
 Time spent: **14** hours spent in total
 
